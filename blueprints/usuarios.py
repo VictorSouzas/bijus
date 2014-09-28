@@ -5,10 +5,13 @@ from flask import (
     request,
     current_app,
     send_from_directory,
-    render_template
+    render_template,
+    session,
+    url_for
     )
-admin_blueprint = Blueprint('admin', __name__)
+import hashlib
 
+admin_blueprint = Blueprint('admin', __name__)
 @admin_blueprint.route("/admin/cadastro/", methods=["GET", "POST"])
 def cadastro():
     if request.method == "POST":
@@ -17,16 +20,46 @@ def cadastro():
 
         login = dados['login']
         email = dados['email']
-        senha = dados['senha']
+
+        instancia_hash = hashlib.md5()
+        instancia_hash.update(dados['senha'])
+        senha = instancia_hash.hexdigest()
 
         try:
             novo_usuario = db.Admin(login, email, senha)
             db.db.session.add(novo_usuario)
             db.db.session.commit()
-            return '<User %s>' % login
-        except Exception, e:
+            return 'sucesso'
+        except Exception:
             db.db.session.rollback()
-            raise e
-        
+            return 'Não foi dessa vez tente novamente mais tarde'
+    
+    else:
+        return render_template('admin/cadastro.html', title=u"Inserir nova noticia")
 
-    return render_template('cadastro.html', title=u"Inserir nova noticia")
+login_blueprint = Blueprint('login', __name__)
+@login_blueprint.route('/admin/login/', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        
+        entrada = request.form.to_dict()
+
+        login = entrada['login']
+        instancia_hash = hashlib.md5()
+        instancia_hash.update(entrada['senha'])
+        senha = instancia_hash.hexdigest()
+        try:
+            usuario = db.Admin.query.filter_by(login=login,senha=senha).first()
+
+            if usuario is None:
+                return 'Usuario não encontrado'
+            else:
+                session['login'] = usuario.login
+                session['hash'] = usuario.senha
+                return 'sucesso'
+        except Exception, e:
+            return '%s' % e
+        
+    else:
+        url = url_for('.login')
+        return url
