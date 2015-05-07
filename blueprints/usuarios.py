@@ -35,7 +35,9 @@ def cadastro():
             return 'Não foi dessa vez tente novamente mais tarde'
     
     else:
-        return render_template('admin/cadastro.html', title=u"Inserir nova noticia")
+        return render_template('admin/cadastro.html',
+                     title=u"Novo usuario na base de dados.",
+                     SimpleTitle=u"Cadastro de usuarios")
 
 login_blueprint = Blueprint('login', __name__)
 @login_blueprint.route('/admin/login/', methods=['GET','POST'])

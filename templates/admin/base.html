@@ -1,0 +1,12 @@
+<html>
+<head>
+    <title>{% block title %} {{title or "Notícias"}} {% endblock %}</title>
+</head>
+<body>
+   <nav>
+       <a href="{{url_for('login')}}">HOME</a> | <a href="{{url_for('.cadastro')}}">CADASTRO</a>
+   </nav>
+   <hr />
+   {% block content %} {% endblock %}
+</body>
+</html>

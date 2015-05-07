@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<script type="text/javascript" src="{{url_for('static', filename='js/Strength/strength.js')}}"></script>
+<link href="{{url_for('static', filename='js/Strength/strength.css')}}" rel="stylesheet">
+<div class="row">
+	<form action="">
+	<div  class="col-md-7">
+		<div class="form-group">
+    		<label for="Nome Completo">Nome: </label>
+  			<input type="text" class="form-control" id="nome" placeholder="Nome" aria-describedby="basic-addon1">
+		</div>
+		<div class="form-group">
+    		<label for="Nome Completo">E-mail: </label>
+  			<input type="mail" class="form-control" id="email" placeholder="seu@email.com" aria-describedby="basic-addon1">
+		</div>
+		<div class="form-group">
+    		<label for="Nome Completo">Senha: </label>
+  			<input type="password" class="form-control" id="password" placeholder="Sua senha" aria-describedby="basic-addon1">
+		</div>
+		<div class="form-group">
+    		<label for="Nome Completo">Repita a senha: </label>
+  			<input type="password" class="form-control" id="re-password" placeholder="Repita a senha" aria-describedby="basic-addon1">
+		</div>
+
+	<button type="submit" class="btn btn-default"> Enviar </button>
+	</div>
+</form>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function ($) {
+$('#password').strength({
+            strengthClass: 'Forca',
+            strengthMeterClass: 'strength_meter',
+            strengthButtonClass: 'button_strength',
+            strengthButtonText: '',
+            strengthButtonTextToggle: ''
+        });		
+});
+		
+</script>
+{% endblock %}
